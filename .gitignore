@@ -33,7 +33,7 @@ cython_debug/
 # Abstra
 .abstra/
 
-# Visual Studio Code
+# VS Code
 #.vscode/
 
 # Ruff cache

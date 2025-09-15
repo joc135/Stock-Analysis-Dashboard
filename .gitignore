@@ -3,7 +3,50 @@ __pycache__/
 *.pyo
 *.pyd
 .env
+*.db
 
 .ipynb_checkpoints/
 
-*.db
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+#.idea/
+
+# Abstra
+.abstra/
+
+# Visual Studio Code
+#.vscode/
+
+# Ruff cache
+.ruff_cache/
+
+# PyPI config
+.pypirc
+
+# Cursor
+.cursorignore
+.cursorindexingignore
+
+# Marimo
+marimo/_static/
+marimo/_lsp/
+__marimo__/

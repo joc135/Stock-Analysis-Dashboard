@@ -3,12 +3,12 @@ import os
 import subprocess
 import pandas as pd
 from sqlalchemy import create_engine
-import importlib.util
 
 # Paths
-ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
+ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # project root
 SRC_DIR = os.path.dirname(__file__)                   # src folder
-sys.path.insert(0, SRC_DIR)
+sys.path.insert(0, ROOT_DIR)  # allow "import config"
+sys.path.insert(0, SRC_DIR)   # allow "import option_pricing"
 
 # Config
 from config import DATABASE_URL
@@ -22,11 +22,10 @@ except ImportError:
         [sys.executable, setup_path, "build_ext", "--inplace"],
         cwd=SRC_DIR
     )
-    import option_pricing  # retry after build
+    import option_pricing  # retry
 
 # Import compiled module
 from option_pricing import monte_carlo_call, monte_carlo_put
-
 
 # Configurable Parameters
 STRIKE_MULTIPLIER = 1.0   # ATM by default

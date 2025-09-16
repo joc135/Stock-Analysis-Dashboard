@@ -7,12 +7,12 @@ import streamlit as st
 import plotly.express as px
 from sqlalchemy import create_engine
 from datetime import datetime
-import importlib.util
 
 # Paths
-ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
+ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # project root
 SRC_DIR = os.path.join(ROOT_DIR, "src")               # src folder
-sys.path.insert(0, SRC_DIR)
+sys.path.insert(0, ROOT_DIR)  # allow "import config"
+sys.path.insert(0, SRC_DIR)   # allow "import option_pricing"
 
 # Config
 from config import DATABASE_URL
@@ -26,11 +26,10 @@ except ImportError:
         [sys.executable, setup_path, "build_ext", "--inplace"],
         cwd=SRC_DIR
     )
-    import option_pricing  # retry after build
+    import option_pricing  # retry
 
 # Import compiled functions
 from option_pricing import monte_carlo_call, monte_carlo_put
-
 
 # PostgreSQL Connection
 engine = create_engine(DATABASE_URL)
@@ -59,7 +58,7 @@ selected_ticker = st.sidebar.selectbox(
     sorted(stock_data_df['symbol'].unique())
 )
 
-# Filter historical data for selected ticker
+# Filter historical data
 hist_df = stock_data_df[stock_data_df['symbol'] == selected_ticker].copy()
 hist_df['date'] = pd.to_datetime(hist_df['date'])
 hist_df.sort_values('date', inplace=True)

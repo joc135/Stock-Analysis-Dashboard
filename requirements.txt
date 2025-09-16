@@ -1,0 +1,7 @@
+pandas>=2.0
+numpy>=1.25
+sqlalchemy>=2.0
+yfinance>=0.2
+streamlit>=1.25
+plotly>=5.20
+psycopg2-binary>=2.9

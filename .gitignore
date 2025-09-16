@@ -1,48 +1,46 @@
+# Byte-compiled / cache
 __pycache__/
 *.pyc
 *.pyo
+
+# Compiled extensions
 *.pyd
+*.so
+*.dll
+*.o
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
 .env
+.venv/
 *.db
 
+# Jupyter
 .ipynb_checkpoints/
 
-# Rope project settings
-.ropeproject
+# IDE / Editor
+.vscode/
+.idea/
+.ropeproject/
 
-# mkdocs documentation
-/site
-
-# mypy
+# Type checkers / linters
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
-# Pyre type checker
 .pyre/
-
-# pytype static type analyzer
 .pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# PyCharm
-#.idea/
-
-# Abstra
-.abstra/
-
-# VS Code
-#.vscode/
-
-# Ruff cache
 .ruff_cache/
 
-# PyPI config
-.pypirc
+# Debug
+cython_debug/
 
-# Cursor
+# Misc tools
+.pypirc
+.abstra/
 .cursorignore
 .cursorindexingignore
 

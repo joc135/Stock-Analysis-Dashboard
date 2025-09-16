@@ -3,6 +3,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 from datetime import datetime
 from option_pricing import monte_carlo_call, monte_carlo_put  # pybind11 module
+from config import DATABASE_URL
 
 # Configurable Parameters
 STRIKE_MULTIPLIER = 1.0   # 1.0 means ATM, 1.05 means 5% above current price
@@ -12,10 +13,9 @@ RISK_FREE_RATE = 0.05      # 5% annual risk-free rate
 VOLATILITY = 0.2           # 20% annual volatility (placeholder; can be per ticker)
 
 # Database connection
-DATABASE_URL = os.getenv("DATABASE_URL")
-if not DATABASE_URL:
-    raise ValueError("Please set DATABASE_URL environment variable")
+
 engine = create_engine(DATABASE_URL)
+
 
 # Fetch latest stock prices
 latest_prices_df = pd.read_sql("SELECT * FROM latest_prices", engine)

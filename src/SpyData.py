@@ -5,12 +5,11 @@ from sqlalchemy import create_engine
 from datetime import datetime 
 from urllib.request import Request, urlopen 
 from urllib.error import URLError, HTTPError 
-
+from config import DATABASE_URL
 # Database connection 
-DATABASE_URL = os.getenv("DATABASE_URL") 
-if not DATABASE_URL: 
-    raise ValueError("Please set the DATABASE_URL environment variable.") 
-engine = create_engine(DATABASE_URL) 
+
+engine = create_engine(DATABASE_URL)
+
 
 # Fetch tickers from Wikipedia 
 url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies" 

@@ -8,26 +8,11 @@ import streamlit as st
 import plotly.express as px
 from sqlalchemy import create_engine
 from datetime import datetime
+from config import DATABASE_URL
 
 # PostgreSQL Connection
-DATABASE_URL = os.getenv("DATABASE_URL")
-if not DATABASE_URL:
-    st.error("DATABASE_URL environment variable not set!")
-    st.stop()
+
 engine = create_engine(DATABASE_URL)
-
-# Dynamically load option_pricing pybind11 module
-SRC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../src"))
-if SRC_PATH not in sys.path:
-    sys.path.insert(0, SRC_PATH)
-
-# Look for .so or .pyd
-module_files = glob.glob(os.path.join(SRC_PATH, "option_pricing*.so")) + \
-               glob.glob(os.path.join(SRC_PATH, "option_pricing*.pyd"))
-
-if not module_files:
-    st.error(f"Could not find option_pricing module in {SRC_PATH}")
-    st.stop()
 
 spec = importlib.util.spec_from_file_location("option_pricing", module_files[0])
 option_pricing = importlib.util.module_from_spec(spec)

@@ -95,7 +95,8 @@ if feature_dfs:
         'MA50': 'ma50', 
         'DailyReturn': 
         'dailyreturn', 
-        'Volatility': 'volatility' 
+        'Volatility': 'volatility', 
+        'Adj Close': 'adj_close'
         }, inplace=True) 
     
     stock_data_df.to_sql("stock_data", engine, if_exists="append", index=False) 

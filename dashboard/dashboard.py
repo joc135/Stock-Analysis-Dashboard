@@ -1,40 +1,20 @@
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # add parent folder to path
-from config import DATABASE_URL
-import glob
-import importlib.util
 import pandas as pd
 import numpy as np
 import streamlit as st
 import plotly.express as px
 from sqlalchemy import create_engine
 from datetime import datetime
-
+ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
+SRC_DIR = os.path.join(ROOT_DIR, "src")               # src folder
+sys.path.extend([ROOT_DIR, SRC_DIR])
+from config import DATABASE_URL
+from option_pricing import monte_carlo_call, monte_carlo_put
 
 # PostgreSQL Connection
 
 engine = create_engine(DATABASE_URL)
-
-module_dir = os.path.join(os.path.dirname(__file__), "modules")
-module_files = [
-    f for f in glob.glob(os.path.join(module_dir, "*.py"))
-    if not os.path.basename(f).startswith("__")
-]
-
-if not module_files:
-    raise RuntimeError(f"No Python module files found in {module_dir}")
-
-for module_file in module_files:
-    module_name = os.path.splitext(os.path.basename(module_file))[0]
-    spec = importlib.util.spec_from_file_location(module_name, module_file)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    globals()[module_name] = module
-    print(f"Imported module: {module_name}")
-
-monte_carlo_call = option_pricing.monte_carlo_call
-monte_carlo_put = option_pricing.monte_carlo_put
 
 # Load Data
 try:

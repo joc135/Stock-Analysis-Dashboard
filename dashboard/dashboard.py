@@ -21,9 +21,8 @@ from config import DATABASE_URL
 try:
     import option_pricing
 except ImportError:
-    setup_path = os.path.join(SRC_DIR, "pybind11_setup.py")
     subprocess.check_call(
-        [sys.executable, setup_path, "build_ext", "--inplace"],
+        [sys.executable, "pybind11_setup.py", "build_ext", "--inplace"],
         cwd=SRC_DIR
     )
     import option_pricing  # retry

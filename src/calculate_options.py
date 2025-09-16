@@ -3,7 +3,7 @@ import os
 import subprocess
 import pandas as pd
 from sqlalchemy import create_engine
-from datetime import datetime
+import importlib.util
 
 # Paths
 ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
@@ -13,28 +13,30 @@ sys.path.insert(0, SRC_DIR)
 # Config
 from config import DATABASE_URL
 
-# Build pybind11 extension if missing
-so_path = os.path.join(SRC_DIR, "option_pricing.cpython-312-x86_64-linux-gnu.so")
-if not os.path.exists(so_path):
+# Ensure pybind11 extension is built
+try:
+    import option_pricing
+except ImportError:
     setup_path = os.path.join(SRC_DIR, "pybind11_setup.py")
-    subprocess.check_call([sys.executable, setup_path, "build_ext", "--inplace"], cwd=SRC_DIR)
+    subprocess.check_call(
+        [sys.executable, setup_path, "build_ext", "--inplace"],
+        cwd=SRC_DIR
+    )
+    import option_pricing  # retry after build
 
 # Import compiled module
 from option_pricing import monte_carlo_call, monte_carlo_put
 
 
-
 # Configurable Parameters
-STRIKE_MULTIPLIER = 1.0   # 1.0 means ATM, 1.05 means 5% above current price
-EXPIRY_YEARS = 0.25       # 3 months = 0.25 years
-SIMULATIONS = 10000        # Monte Carlo iterations
-RISK_FREE_RATE = 0.05      # 5% annual risk-free rate
-VOLATILITY = 0.2           # 20% annual volatility (placeholder can be per ticker)
+STRIKE_MULTIPLIER = 1.0   # ATM by default
+EXPIRY_YEARS = 0.25       # 3 months
+SIMULATIONS = 10000
+RISK_FREE_RATE = 0.05
+VOLATILITY = 0.2
 
 # Database connection
-
 engine = create_engine(DATABASE_URL)
-
 
 # Fetch latest stock prices
 latest_prices_df = pd.read_sql("SELECT * FROM latest_prices", engine)

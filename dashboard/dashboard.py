@@ -8,12 +8,13 @@ import plotly.express as px
 from sqlalchemy import create_engine
 from datetime import datetime
 
-# Paths
 ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
 SRC_DIR = os.path.join(ROOT_DIR, "src")               # src folder
-sys.path.insert(0, SRC_DIR)                           # insert at front
 
-# Config
+# Add both root and src to sys.path
+sys.path.insert(0, ROOT_DIR)
+sys.path.insert(0, SRC_DIR)
+
 from config import DATABASE_URL
 
 # Ensure required build tools are installed

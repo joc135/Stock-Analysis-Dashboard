@@ -5,12 +5,13 @@ import pandas as pd
 from sqlalchemy import create_engine
 from datetime import datetime
 
-# Paths
 ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
-SRC_DIR = os.path.dirname(__file__)                   # src folder
-sys.path.insert(0, SRC_DIR)                           # prioritize src folder
+SRC_DIR = os.path.join(ROOT_DIR, "src")               # src folder
 
-# Config
+# Add both root and src to sys.path
+sys.path.insert(0, ROOT_DIR)
+sys.path.insert(0, SRC_DIR)
+
 from config import DATABASE_URL
 
 # Ensure required build tools are installed

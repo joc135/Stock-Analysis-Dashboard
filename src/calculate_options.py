@@ -1,20 +1,26 @@
+import sys
+import os
 import pandas as pd
 from sqlalchemy import create_engine
 from datetime import datetime
-import sys
-import os
+
+# Paths
 ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
 SRC_DIR = os.path.dirname(__file__)                   # src folder
 sys.path.extend([ROOT_DIR, SRC_DIR])
+
+# Config
 from config import DATABASE_URL
-import subprocess
 
-# Build the extension on deployment
-if not os.path.exists("src/option_pricing.cpython-313-x86_64-linux-gnu.so"):
-    subprocess.check_call([sys.executable, "pybind11_setup.py", "build_ext", "--inplace"])
+# Add src to sys.path and import prebuilt module
+sys.path.append(SRC_DIR)
+try:
+    from option_pricing import monte_carlo_call, monte_carlo_put
+except ModuleNotFoundError:
+    raise RuntimeError(
+        "Prebuilt option_pricing module not found. Make sure .pyd (Windows) or .so (Linux) exists in src."
+    )
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
-from option_pricing import monte_carlo_call, monte_carlo_put
 
 # Configurable Parameters
 STRIKE_MULTIPLIER = 1.0   # 1.0 means ATM, 1.05 means 5% above current price

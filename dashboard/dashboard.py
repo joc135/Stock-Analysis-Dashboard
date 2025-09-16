@@ -1,6 +1,5 @@
 import sys
 import os
-import subprocess
 import pandas as pd
 import numpy as np
 import streamlit as st
@@ -16,19 +15,15 @@ sys.path.extend([ROOT_DIR, SRC_DIR])
 # Config
 from config import DATABASE_URL
 
-# Build pybind11 extension if missing
-so_name = "option_pricing.cpython-313-x86_64-linux-gnu.so"
-pyd_name = "option_pricing.pyd"
-so_path = os.path.join(SRC_DIR, so_name)
-pyd_path = os.path.join(SRC_DIR, pyd_name)
-setup_path = os.path.join(SRC_DIR, "pybind11_setup.py")
-
-if not (os.path.exists(so_path) or os.path.exists(pyd_path)):
-    subprocess.check_call([sys.executable, setup_path, "build_ext", "--inplace"])
-
-# Add src to sys.path for importing compiled module
+# Add src to sys.path and import prebuilt module
 sys.path.append(SRC_DIR)
-from option_pricing import monte_carlo_call, monte_carlo_put
+try:
+    from option_pricing import monte_carlo_call, monte_carlo_put
+except ModuleNotFoundError:
+    raise RuntimeError(
+        "Prebuilt option_pricing module not found. Make sure .pyd (Windows) or .so (Linux) exists in src."
+    )
+
 
 
 # PostgreSQL Connection

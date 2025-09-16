@@ -17,7 +17,12 @@ dist/
 # Virtual environments
 .env
 .venv/
-*.db
+
+# Logs and databases
+*.log
+logs/
+pgdata/
+*.db  # remove if you want to keep small sample DBs
 
 # Jupyter
 .ipynb_checkpoints/

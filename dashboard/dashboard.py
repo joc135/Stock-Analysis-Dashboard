@@ -21,12 +21,15 @@ SRC_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../src"))
 if SRC_PATH not in sys.path:
     sys.path.insert(0, SRC_PATH)
 
-pyd_files = glob.glob(os.path.join(SRC_PATH, "option_pricing*.pyd"))
-if not pyd_files:
-    st.error(f"Could not find option_pricing .pyd file in {SRC_PATH}")
+# Look for .so or .pyd
+module_files = glob.glob(os.path.join(SRC_PATH, "option_pricing*.so")) + \
+               glob.glob(os.path.join(SRC_PATH, "option_pricing*.pyd"))
+
+if not module_files:
+    st.error(f"Could not find option_pricing module in {SRC_PATH}")
     st.stop()
 
-spec = importlib.util.spec_from_file_location("option_pricing", pyd_files[0])
+spec = importlib.util.spec_from_file_location("option_pricing", module_files[0])
 option_pricing = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(option_pricing)
 
@@ -59,6 +62,8 @@ selected_ticker = st.sidebar.selectbox(
 
 # Filter historical data for selected ticker
 hist_df = stock_data_df[stock_data_df['symbol'] == selected_ticker].copy()
+hist_df['date'] = pd.to_datetime(hist_df['date'])
+hist_df.sort_values('date', inplace=True)  # <- sort by date
 
 # Historical Price Chart
 fig_price = px.line(

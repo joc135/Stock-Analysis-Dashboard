@@ -4,7 +4,7 @@ from setuptools import setup
 ext_modules = [
     Pybind11Extension(
         "option_pricing",          # module name
-        ["src/option_pricing.cpp"] # path to cpp file
+        ["option_pricing.cpp"] # path to cpp file
     ),
 ]
 

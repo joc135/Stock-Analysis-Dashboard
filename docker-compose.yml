@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:17
+    container_name: stocks-db
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"   # expose to host if you want to connect locally
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: stock-dashboard
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8501:8501"
+    depends_on:
+      - db
+    volumes:
+      - ./dashboard:/app/dashboard
+
+  refresher:
+    build: .
+    container_name: data-refresher
+    command: >
+      sh -c "
+        mkdir -p /app/logs &&
+        while true; do
+          echo \"===== Refresh started: $(date) =====\" >> /app/logs/refresher.log 2>&1;
+          python /app/src/SpyData.py >> /app/logs/refresher.log 2>&1;
+          if [ $? -eq 0 ]; then
+            echo \"===== Refresh completed successfully: $(date) =====\" >> /app/logs/refresher.log 2>&1;
+          else
+            echo \"===== Refresh FAILED: $(date) =====\" >> /app/logs/refresher.log 2>&1;
+          fi
+          sleep 86400;
+        done"
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+    depends_on:
+      - db
+
+volumes:
+  pgdata:

@@ -64,4 +64,4 @@ except Exception as e:
         df.to_sql("stock_data", engine, if_exists="append", index=False)
         total_inserted += len(df)
 
-    print(f"Inserted {total_inserted} rows into PostgreSQL through batches")
+    print(f"Inserted {total_inserted} rows into PostgreSQL through batches.")

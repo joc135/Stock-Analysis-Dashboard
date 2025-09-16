@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 import pandas as pd
 from sqlalchemy import create_engine
 from datetime import datetime
@@ -7,19 +8,27 @@ from datetime import datetime
 # Paths
 ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
 SRC_DIR = os.path.dirname(__file__)                   # src folder
-sys.path.extend([ROOT_DIR, SRC_DIR])
+sys.path.insert(0, SRC_DIR)                           # prioritize src folder
 
 # Config
 from config import DATABASE_URL
 
-# Add src to sys.path and import prebuilt module
-sys.path.append(SRC_DIR)
+# Ensure required build tools are installed
 try:
-    from option_pricing import monte_carlo_call, monte_carlo_put
-except ModuleNotFoundError:
-    raise RuntimeError(
-        "Prebuilt option_pricing module not found. Make sure .pyd (Windows) or .so (Linux) exists in src."
-    )
+    import pybind11
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "pybind11"])
+
+# Compile the extension on deploy if missing
+so_name = f"option_pricing.cpython-{sys.version_info.major}{sys.version_info.minor}-x86_64-linux-gnu.so"
+so_path = os.path.join(SRC_DIR, so_name)
+setup_path = os.path.join(SRC_DIR, "pybind11_setup.py")
+
+if not os.path.exists(so_path):
+    subprocess.check_call([sys.executable, setup_path, "build_ext", "--inplace"])
+
+# Import compiled module
+from option_pricing import monte_carlo_call, monte_carlo_put
 
 
 # Configurable Parameters

@@ -7,3 +7,5 @@ streamlit
 plotly
 pybind11
 lxml
+setuptools
+wheel

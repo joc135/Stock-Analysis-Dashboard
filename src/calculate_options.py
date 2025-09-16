@@ -36,7 +36,7 @@ STRIKE_MULTIPLIER = 1.0   # 1.0 means ATM, 1.05 means 5% above current price
 EXPIRY_YEARS = 0.25       # 3 months = 0.25 years
 SIMULATIONS = 10000        # Monte Carlo iterations
 RISK_FREE_RATE = 0.05      # 5% annual risk-free rate
-VOLATILITY = 0.2           # 20% annual volatility (placeholder; can be per ticker)
+VOLATILITY = 0.2           # 20% annual volatility (placeholder can be per ticker)
 
 # Database connection
 

@@ -11,7 +11,7 @@ from datetime import datetime
 # Paths
 ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
 SRC_DIR = os.path.join(ROOT_DIR, "src")               # src folder
-sys.path.insert(0, SRC_DIR)                           # insert at front to prioritize
+sys.path.insert(0, SRC_DIR)                           # insert at front
 
 # Config
 from config import DATABASE_URL

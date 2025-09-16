@@ -1,10 +1,12 @@
-import os 
 import pandas as pd 
 import yfinance as yf 
 from sqlalchemy import create_engine 
 from datetime import datetime 
 from urllib.request import Request, urlopen 
 from urllib.error import URLError, HTTPError 
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # add parent folder to path
 from config import DATABASE_URL
 # Database connection 
 

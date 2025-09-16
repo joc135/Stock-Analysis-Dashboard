@@ -1,5 +1,7 @@
 import sys
 import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # add parent folder to path
+from config import DATABASE_URL
 import glob
 import importlib.util
 import pandas as pd
@@ -8,7 +10,7 @@ import streamlit as st
 import plotly.express as px
 from sqlalchemy import create_engine
 from datetime import datetime
-from config import DATABASE_URL
+
 
 # PostgreSQL Connection
 

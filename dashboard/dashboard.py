@@ -10,7 +10,15 @@ ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
 SRC_DIR = os.path.join(ROOT_DIR, "src")               # src folder
 sys.path.extend([ROOT_DIR, SRC_DIR])
 from config import DATABASE_URL
+import subprocess
+
+# Build the extension on deployment
+if not os.path.exists("src/option_pricing.cpython-313-x86_64-linux-gnu.so"):
+    subprocess.check_call([sys.executable, "pybind11_setup.py", "build_ext", "--inplace"])
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 from option_pricing import monte_carlo_call, monte_carlo_put
+
 
 # PostgreSQL Connection
 

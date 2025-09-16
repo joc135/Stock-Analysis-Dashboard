@@ -1,22 +1,33 @@
 import sys
 import os
+import subprocess
 import pandas as pd
 import numpy as np
 import streamlit as st
 import plotly.express as px
 from sqlalchemy import create_engine
 from datetime import datetime
+
+# Paths
 ROOT_DIR = os.path.dirname(os.path.dirname(__file__))  # root folder
 SRC_DIR = os.path.join(ROOT_DIR, "src")               # src folder
 sys.path.extend([ROOT_DIR, SRC_DIR])
+
+# Config
 from config import DATABASE_URL
-import subprocess
 
-# Build the extension on deployment
-if not os.path.exists("src/option_pricing.cpython-313-x86_64-linux-gnu.so"):
-    subprocess.check_call([sys.executable, "pybind11_setup.py", "build_ext", "--inplace"])
+# Build pybind11 extension if missing
+so_name = "option_pricing.cpython-313-x86_64-linux-gnu.so"
+pyd_name = "option_pricing.pyd"
+so_path = os.path.join(SRC_DIR, so_name)
+pyd_path = os.path.join(SRC_DIR, pyd_name)
+setup_path = os.path.join(SRC_DIR, "pybind11_setup.py")
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+if not (os.path.exists(so_path) or os.path.exists(pyd_path)):
+    subprocess.check_call([sys.executable, setup_path, "build_ext", "--inplace"])
+
+# Add src to sys.path for importing compiled module
+sys.path.append(SRC_DIR)
 from option_pricing import monte_carlo_call, monte_carlo_put
 
 

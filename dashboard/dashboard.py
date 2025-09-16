@@ -16,9 +16,22 @@ from datetime import datetime
 
 engine = create_engine(DATABASE_URL)
 
-spec = importlib.util.spec_from_file_location("option_pricing", module_files[0])
-option_pricing = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(option_pricing)
+module_dir = os.path.join(os.path.dirname(__file__), "modules")
+module_files = [
+    f for f in glob.glob(os.path.join(module_dir, "*.py"))
+    if not os.path.basename(f).startswith("__")
+]
+
+if not module_files:
+    raise RuntimeError(f"No Python module files found in {module_dir}")
+
+for module_file in module_files:
+    module_name = os.path.splitext(os.path.basename(module_file))[0]
+    spec = importlib.util.spec_from_file_location(module_name, module_file)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    globals()[module_name] = module
+    print(f"Imported module: {module_name}")
 
 monte_carlo_call = option_pricing.monte_carlo_call
 monte_carlo_put = option_pricing.monte_carlo_put

@@ -3,7 +3,7 @@ Instructions:
 create .streamlit folder with secrets.toml file and .env file and place 
 DATABASE_URL = "postgresql+psycopg2://user:password@localhost:port/db"
 DATABASE_URL=postgresql+psycopg2://user:password@localhost:port/db 
-respectively
+respectively with your actual details
 
 create three tables in postgreSQL db
 

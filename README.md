@@ -1,4 +1,4 @@
-Instruction:
+Instructions:
 
 create .streamlit folder with secrets.toml file and .env file and place 
 DATABASE_URL = "postgresql+psycopg2://user:password@localhost:port/db"

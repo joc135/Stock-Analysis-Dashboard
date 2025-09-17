@@ -43,6 +43,8 @@ CREATE TABLE IF NOT EXISTS public.options_prices
 
 run SpyData.py to populate tables
 
+run dashboard.py to build option_pricing extension
+
 run streamlit run dashboard/dashboard.py to locally open stock analysis dashboard
 
 
